@@ -1,0 +1,13 @@
+.nav{
+    @apply border-2 border-black flex flex-wrap text-2xl font-[merck] font-medium p-2 bg-[#503291] 
+    text-white w-[100%] justify-between
+}
+
+.p-nav{
+    @apply hover:scale-[1] 
+}
+
+.p-merck{
+    @apply text-right
+}
+

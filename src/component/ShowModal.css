@@ -1,0 +1,23 @@
+.wrapper{
+    @apply left-0 right-0 top-0 bottom-0 fixed bg-gray-300
+}
+
+.container{
+    @apply fixed border-2 bg-white h-40 mt-[-4rem] rounded-md w-[40rem] left-[23rem] p-4
+}
+
+button{
+    @apply border-[0.1rem] border-black p-1 rounded-lg m-1 bg-blue-950 text-white
+}
+
+.input-modal{
+    @apply border-[0.04rem]  rounded-md mx-2 border-black w-48 p-1
+}
+
+.select-modal{
+    @apply border-[0.04rem]  rounded-md mx-2 border-black w-40 text-center
+}
+
+.div-button{
+    @apply ml-64 mt-10
+}
