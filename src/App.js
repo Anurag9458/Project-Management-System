@@ -6,6 +6,7 @@ import Table from "./component/Table";
 import NoteState from "./context/NoteState";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Card from "./component/Card";
 
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Navbar />}>
               <Route index element={<Table />} />
-              <Route path="form" element={<Form />} />\
+              <Route path="form" element={<Form />}/>
+              <Route path="card" element={<Card/>}/>
              
             </Route>
           </Routes>

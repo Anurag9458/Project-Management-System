@@ -6,8 +6,22 @@ import { toast } from "react-toastify";
 
 const NoteState = (props) => {
   const nRole = { role: "", name: "", isbuttonActive: true };
-  const [cancel,setCancel]=useState(true);
   const [details, setDetails] = useState({
+    pname: "",
+    pdes: "",
+    roles: [{ ...nRole }],
+    url: "",
+    phase: "",
+  });
+  const tdata = {
+    pname: "",
+    pdes: "",
+    roles: [{ ...nRole }],
+    url: "",
+    phase: "",
+  };
+
+  const [eye, setEye] = useState({
     pname: "",
     pdes: "",
     roles: [{ ...nRole }],
@@ -17,10 +31,25 @@ const NoteState = (props) => {
 
   const navigate = useNavigate();
 
-  const handleEdit = (selectedData) => {
+  const sortData = (temp) => {
+    const sortedTable = temp.sort((a, b) => {
+      return a.pname.localeCompare(b.pname);
+    });
+    return sortedTable;
+  };
 
-    setDetails(selectedData);
-    navigate("/form");
+  const handleEdit = (val) => {
+    const ind = print.findIndex(
+      (element) => JSON.stringify(element) === JSON.stringify(val)
+    );
+    if (ind !== -1) {
+      const filtered = print.filter((e, index) => index !== ind);
+      const sortedData = sortData(filtered);
+      const temp = print[ind];
+      setPrint(sortedData);
+      setDetails(temp);
+      navigate("/form");
+    }
   };
 
   const [print, setPrint] = useState([]);
@@ -37,83 +66,73 @@ const NoteState = (props) => {
   );
 
   const updateDetails = (e) => {
-    let check=false;
-    let a=JSON.stringify(e);
-    print.forEach(element => {
-      if(JSON.stringify(element)===a){
-        check=true;
-      }
-    });
+    const check = print.some(
+      (element) => JSON.stringify(element) === JSON.stringify(e)
+    );
 
     if (print.length > 0 && check) {
-      toast.info("You have not update anything yet!");
+      toast.warning("Details are already present");
       return 0;
     } else {
-      setPrint([...print, e]);
-      const store = JSON.stringify([...print, e]);
+      const updatedPrint = [...print, e];
+      setPrint(updatedPrint);
+      const store = JSON.stringify(sortData(updatedPrint));
       localStorage.setItem("data", store);
-      setDetails({
-        pname: "",
-        pdes: "",
-        roles: [{ ...nRole }],
-        url: "",
-        phase: "",
-      });
+      setDetails(tdata);
       return 1;
     }
   };
 
-  useEffect(() => {
-    console.log(print);
-  }, [print]);
+  //Here we are deleting the details
 
-    //Here we are deleting the details
+  const handleDelete = (val) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedPrint = print.filter(
+          (e) => JSON.stringify(e) !== JSON.stringify(val)
+        );
+        setPrint(updatedPrint);
+        localStorage.setItem("data", JSON.stringify(sortData(updatedPrint)));
 
-    const handleDelete = (val) => {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
+  };
 
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
-        console.log(val);
-        if (result.isConfirmed) {
-          const filtered = print.filter(
-            (e) => JSON.stringify(e)!==JSON.stringify(val)
-          );
-          setPrint(filtered);
-   
-          localStorage.setItem("data", JSON.stringify(filtered));
-   
-          Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            icon: "success",
-          });
-        }
-      });
-        
-      };
-
+  // Here we are handling eye button
+  const handleVisibility = (val) => {
+    setEye(val);
+    navigate("/card");
+  };
 
   return (
     <NoteContext.Provider
-    value={{
-      details,
-      setDetails,
-      handleDelete,
-      updateDetails,
-      handleEdit,
-      setCancel,
-      print,
-    }}
-  >
-    {props.children}
-  </NoteContext.Provider>
+      value={{
+        details,
+        setDetails,
+        handleDelete,
+        updateDetails,
+        handleEdit,
+        handleVisibility,
+        setPrint,
+        eye,
+        print,
+      }}
+    >
+      {props.children}
+    </NoteContext.Provider>
   );
 };
 

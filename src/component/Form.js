@@ -23,7 +23,13 @@ const Form = () => {
   const [roleValue, setRoleValue] = useState("");
   const [nameValue, setNameValue] = useState("");
   const [errors, setErrors] = useState({});
-
+  const tdata = {
+    pname: "",
+    pdes: "",
+    roles: [{ ...nRole }],
+    url: "",
+    phase: "",
+  };
   const [details, setDetails] = useState({
     pname: "",
     pdes: "",
@@ -80,11 +86,17 @@ const Form = () => {
     }
   };
 
+  //Here we are checking validations
   const isValidUrl = (url) => {
     const urlPattern = /^(?:\w+:)?\/\/([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/;
     return urlPattern.test(url);
   };
 
+  const num = (val) => {
+    return !Number.isInteger(Number(val));
+  };
+
+  //Here we are handling submit button
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -93,7 +105,7 @@ const Form = () => {
     if (!details.pname.trim()) {
       validationErrors.pname = true;
     }
-    if (!details.phase.trim()) {
+    if (num(details.phase) || !details.phase.trim()) {
       validationErrors.phase = true;
     }
     if (!details.pdes.trim()) {
@@ -103,6 +115,7 @@ const Form = () => {
       validationErrors.url = true;
     }
     setErrors(validationErrors);
+    console.log(errors);
     if (Object.keys(validationErrors).length === 0) {
       let value = a.updateDetails(details);
 
@@ -118,15 +131,22 @@ const Form = () => {
     }
   };
 
+  //Here we are handling cancel button
+  const handleCancel = () => {
+    a.setPrint([...a.print, a.details]);
+    a.setDetails(tdata);
+    navigate(-1);
+  };
+
   return (
     <>
       <div>
-        <div className="text-2xl font-[merck] pl-60 pt-1 text-[#503291] font-bold">
+        <div className="text-2xl text-center m-2 font-[merck]  pt-1 text-[#503291] font-bold">
           Form
         </div>
         <div className="form">
           <div className="grid-form">
-            <div className="grid grid-rows-2 div-form">
+            <div className="div-form">
               <label>Project Name :</label>
               <input
                 className={
@@ -135,21 +155,19 @@ const Form = () => {
                     : "error"
                 }
                 type="text"
+                placeholder="Enter Project Name"
                 value={details.pname}
                 onChange={(e) => onTextChange(e.target.value, "pname")}
               />
             </div>
 
-            <div className="grid grid-rows-2 div-form">
+            <div className="div-form">
               <label>Phase :</label>
               <input
-                className={
-                  !errors.phase || details.phase.length > 0
-                    ? "inputform"
-                    : "error"
-                }
+                className={!errors.phase ? "inputform" : "error"}
                 type="text"
                 value={details.phase}
+                placeholder="Enter a Number"
                 onChange={(e) => onTextChange(e.target.value, "phase")}
               />
             </div>
@@ -170,33 +188,39 @@ const Form = () => {
           </div>
           {details.roles.map((item, index) => {
             return (
-              <div className="grid-form" key={`roleBox_${index}`}>
-                <div className="grid grid-rows-2 div-form">
-                  <label>Role : </label>
-                  <select
-                    className="inputform"
-                    name="dropdown"
-                    id="dropdown"
-                    value={item.role}
-                    onChange={(e) =>
-                      onRollChange(e.target.value, "role", index)
-                    }
-                  >
-                    <option value="0">Select</option>
-                    <option value="1">Developer</option>
-                    <option value="2">PMO</option>
-                    <option value="3">Lead</option>
-                    <option value="4">QA</option>
-                    <option value="5">Business</option>
-                  </select>
+              <div
+                className="grid-form space-x-[5rem]"
+                key={`roleBox_${index}`}
+              >
+                <div className="div-form flex">
+                  <label className="mt-2">Role : </label>
+                  <div className="w-[15rem] mx-1">
+                    <select
+                      className="w-full border-black border-[0.05rem] pl-5 text-xl h-full rounded-lg"
+                      name="dropdown"
+                      id="dropdown"
+                      value={item.role}
+                      onChange={(e) =>
+                        onRollChange(e.target.value, "role", index)
+                      }
+                    >
+                      <option value="0">Select</option>
+                      <option value="1">Developer</option>
+                      <option value="2">PMO</option>
+                      <option value="3">Lead</option>
+                      <option value="4">QA</option>
+                      <option value="5">Business</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="grid grid-rows-2 div-form">
-                  <label>Name : </label>
+                <div className="flex div-form">
+                  <label className="mt-2">Name : </label>
                   <div className="flex">
                     <input
                       className="name-form"
                       type="text"
                       value={item.name}
+                      placeholder="Enter Your Name"
                       onChange={(e) =>
                         onRollChange(e.target.value, "name", index)
                       }
@@ -221,18 +245,19 @@ const Form = () => {
           })}
 
           <div className="grid-form">
-            <div className="grid grid-rows-2 div-form">
+            <div className="div-form">
               <label>Source Path :</label>
               <input
                 className={!errors.url ? "inputform" : "error"}
                 type="url"
                 value={details.url}
+                placeholder="Enter a valid Url"
                 onChange={(e) => onTextChange(e.target.value, "url")}
               />
             </div>
           </div>
           <div className="flex flex-wrap mx-auto w-44 m-1">
-            <button className="w-20 bg-red-600" onClick={() =>{ a.setCancel(true);navigate(-1)}}>
+            <button className="w-20 bg-red-600" onClick={handleCancel}>
               Cancel
             </button>
             <button className="w-20" onClick={handleSubmit}>

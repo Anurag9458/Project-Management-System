@@ -3,24 +3,24 @@
 }
 
 .inputform{
-    @apply border-[0.05rem] w-80  border-black rounded-md p-2
+    @apply border-[0.05rem] w-fit border-black rounded-md p-2 mx-1
 }
 
 .error{
-    @apply border-[0.1rem] w-80  border-red-700 rounded-md p-2
+    @apply border-[0.1rem] w-full  border-red-700 rounded-md p-2
 }
 
 .texterror{
-    @apply block w-[44rem] h-[5rem] border-[0.1rem] border-red-700 mt-3 rounded-lg p-2  
+    @apply block w-full h-[5rem] border-[0.1rem] border-red-700 mt-1 rounded-lg p-1  
 }
 
 .textform{
-    @apply block w-[42.5rem] h-[5rem] border-[0.05rem] border-black mt-1 rounded-lg p-2 
+    @apply block  w-full   h-[5rem] border-[0.05rem] border-black mt-1 rounded-lg p-1 
 }
 
 
 .div-form{
-    @apply my-2 ml-10
+    @apply my-[1rem] mx-[2rem] 
 }
 
 .add-button{
@@ -41,7 +41,7 @@ button{
 }
 
 .name-form{
-    @apply border-[0.05rem] lg:w-[18rem] md:w-[18rem] sm:w-[10rem] border-black rounded-md p-2
+    @apply border-[0.05rem] w-full border-black rounded-md p-2 mx-1
 }
 
 label{
