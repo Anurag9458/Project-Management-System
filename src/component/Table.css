@@ -1,5 +1,5 @@
 .div-table {
-  @apply  my-10 ;
+  @apply  my-4 ;
 }
 
 .table{
@@ -11,19 +11,19 @@
 }
 
 .th-table {
-  @apply p-2 border-2 border-black text-center w-56 font-serif font-semibold bg-[#f1f3f3];
+  @apply p-1 border-2 border-black text-center w-52 font-serif font-semibold bg-[#f1f3f3];
 }
 
 .th1-table {
-  @apply p-2 border-2 border-black text-center w-56 font-light font-serif;
+  @apply p-1 border-2 border-black text-center w-52 font-light font-serif;
 }
 
 .action {
   @apply p-2 border-2 border-black text-center w-40 font-semibold font-serif;
 }
 
-button {
-  @apply border-[0.1rem] border-black p-1 rounded-lg m-1 bg-[#503291] text-white;
+.button {
+  @apply border-[0.1rem] border-black py-1 px-2 rounded-lg m-1 bg-[#503291] text-white;
 }
 
 .inputsearch {

@@ -5,11 +5,10 @@ import NoteContext from "../context/NoteContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
-const Form = () => {
+const EditForm = () => {
   const a = useContext(NoteContext);
   const [flag, setFlag] = useState(false);
-  const {addForm}=a;
+  const { handleEdit } = a;
   useEffect(
     () => {
       if (a.details.project_name.length > 0) setFlag(true);
@@ -18,7 +17,7 @@ const Form = () => {
     // eslint-disable-next-line
     []
   );
-  
+
   const navigate = useNavigate();
   const nRole = { role: "", name: "", isbuttonActive: true };
   const [roleValue, setRoleValue] = useState("");
@@ -30,7 +29,7 @@ const Form = () => {
     roles: [{ ...nRole }],
     url: "",
     phase: "",
-    status:""
+    status: "",
   };
   const [details, setDetails] = useState({
     project_name: "",
@@ -38,13 +37,14 @@ const Form = () => {
     roles: [{ ...nRole }],
     url: "",
     phase: "",
-    status:""
+    status: "",
   });
 
   useEffect(
     () => {
       setDetails(a.details);
       // console.log(a.details.project_name);
+      console.log(a.details);
       if (a.details.project_name) {
         setNameValue("true");
         setRoleValue("true");
@@ -53,7 +53,6 @@ const Form = () => {
     // eslint-disable-next-line
     []
   );
-
 
   //Here We are adding role
   const addRoll = () => {
@@ -68,7 +67,6 @@ const Form = () => {
     setNameValue("");
   };
 
-
   //Here we are handeling text-change
   const onTextChange = (val, key) => {
     setDetails({
@@ -76,7 +74,6 @@ const Form = () => {
       [key]: val ? val : "",
     });
   };
-
 
   //Here we handeling roles
   const onRollChange = (val, key, kIndex) => {
@@ -95,9 +92,6 @@ const Form = () => {
     }
   };
 
-
- 
-
   //Here we are checking validations
   const isValidUrl = (url) => {
     const urlPattern = /^(?:\w+:)?\/\/([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/;
@@ -111,73 +105,48 @@ const Form = () => {
   //Here we are handling submit button
   const handleSubmit = (e) => {
     e.preventDefault();
-    addForm(details.project_name,details.project_des,details.roles,details.url,details.phase,details.status);
+    // console.log(details);
+    handleEdit(
+      details._id,
+      details.project_name,
+      details.project_des,
+      details.roles,
+      details.url,
+      details.phase,
+      details.status
+    );
+    toast.success("Form Edited Successfully");
     navigate("/");
-    // const validationErrors = {};
-
-    // if (!details.project_name.trim()) {
-    //   validationErrors.project_name = true;
-    // }
-    // if (num(details.phase) || !details.phase.trim()) {
-    //   validationErrors.phase = true;
-    // }
-    // if (!details.project_des.trim()) {
-    //   validationErrors.project_des = true;
-    // }
-    // if (!isValidUrl(details.url)) {
-    //   validationErrors.url = true;
-    // }
-    // if (!details.status.trim()) {
-    //   validationErrors.project_des = true;
-    // }
-    // setErrors(validationErrors);
-    // console.log(errors);
-    // if (Object.keys(validationErrors).length === 0) {
-    //   let value = a.updateDetails(details);
-
-    //   if (value) {
-    //     const successMessage = flag
-    //       ? "Details Updated Successfully!"
-    //       : "Details Added Successfully!";
-    //     toast.success(successMessage);
-    //     setDetails({});
-
-    //     navigate("/");
-    //   }
-    // }
+    setDetails(tdata);
   };
-
-
-  
 
   //Here we are handling cancel button
   const handleCancel = () => {
-    // a.setPrint([...a.print, a.details]);
     a.setDetails(tdata);
     navigate(-1);
   };
 
-  const check=(phaseValue)=>{
-    if(details.project_name.length){
-    // console.log(details.project_name);
-    // const temp1=details;
-    const temp2=a.print.filter((el)=>el.project_name===details.project_name && el.phase===phaseValue)
-    // console.log(temp2);
-    // console.log(temp2[0].project_name.length);
-    if(temp2.length>0){
-      setDetails(temp2[0]);
-    }else{
-      setDetails({...tdata, project_name: details.project_name, phase: phaseValue});
-    }
-  }
-  }
+  // const check=(phaseValue)=>{
+  //   if(details.project_name.length){
+  //   // console.log(details.project_name);
+  //   // const temp1=details;
+  //   const temp2=a.print.filter((el)=>el.project_name===details.project_name && el.phase===phaseValue)
+  //   // console.log(temp2);
+  //   // console.log(temp2[0].project_name.length);
+  //   if(temp2.length>0){
+  //     setDetails(temp2[0]);
+  //   }else{
+  //     setDetails({...tdata, project_name: details.project_name, phase: phaseValue});
+  //   }
+  // }
+  // }
 
-  const handlePhase=(value)=>{
+  const handlePhase = (value) => {
     // console.log(value);
-      onTextChange(value,"phase");
-      // console.log(details);
-      // check(value);
-  }
+    onTextChange(value, "phase");
+    // console.log(details);
+    // check(value);
+  };
 
   return (
     <>
@@ -188,7 +157,7 @@ const Form = () => {
         <div className="form">
           <div className="grid-form">
             <div className="div-form">
-              <p><label>Project Name :</label></p>
+             <p> <label>Project Name :</label></p>
               <input
                 className={
                   !errors.project_name || details.project_name.length > 0
@@ -203,35 +172,33 @@ const Form = () => {
             </div>
 
             <div className="div-form">
-             <p> <label >Phase :</label></p>
+              <p><label>Phase :</label></p>
               <div className="w-[15rem] mx-1">
-                    <select
-                      className="w-full p-2 border text-xl h-full rounded-md my-2"
-                      name="dropdown"
-                      id="dropdown"
-                      value={details.phase}
-                      onChange={(e)=>handlePhase(e.target.value)}
-                    >
-                      <option value="0">Select</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                    </select>
-                  </div>
+                <select
+                  className="w-full p-2 border text-xl h-full rounded-md my-2"
+                  name="dropdown"
+                  id="dropdown"
+                  value={details.phase}
+                  onChange={(e) => handlePhase(e.target.value)}
+                >
+                  <option value="0">Select</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+              </div>
               {/* <button onClick={check}>Check</button> */}
             </div>
-
-            
           </div>
 
           <div className="div-form">
-            <p><label>Project Description :</label></p>
+            <p><label >Project Description :</label></p>
             <textarea
               className={
                 !errors.project_des || details.project_des.length > 0
@@ -250,7 +217,7 @@ const Form = () => {
                 key={`roleBox_${index}`}
               >
                 <div className="div-form ">
-                  <p><label>Role : </label></p>
+                  <p><label >Role : </label></p>
                   <div className="w-[15rem] ">
                     <select
                       className="w-full p-2 border text-xl h-full rounded-md"
@@ -270,8 +237,8 @@ const Form = () => {
                     </select>
                   </div>
                 </div>
-                <div className="div-form ">
-                  <p><label >Name : </label></p>
+                <div className="div-form">
+                 <p> <label >Name : </label></p>
                   <div className="flex">
                     <input
                       className="name-form"
@@ -282,7 +249,6 @@ const Form = () => {
                         onRollChange(e.target.value, "name", index)
                       }
                     />
-                    <div className="w-[2rem]">
                     {item.isbuttonActive ? (
                       <button
                         className={`button-add ${
@@ -295,7 +261,7 @@ const Form = () => {
                       </button>
                     ) : (
                       ""
-                    )}</div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -323,11 +289,11 @@ const Form = () => {
               />
             </div>
           </div>
-          <div className=" text-center">
-            <button className="bg-red-600 border-2 rounded-lg mx-2 py-1 text-white font-serif px-2" onClick={handleCancel}>
+          <div className="text-center">
+            <button className="bg-red-600 border-2 rounded-lg py-1 text-white font-serif px-2 mx-2" onClick={handleCancel}>
               Cancel
             </button>
-            <button className="bg-[#503291] border-2 rounded-lg py-1 mx-2 text-white font-serif px-2" onClick={handleSubmit}>
+            <button className="bg-[#503291] border-2 rounded-lg py-1 text-white font-serif px-2 mx-2" onClick={handleSubmit}>
               Submit
             </button>
           </div>
@@ -337,4 +303,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default EditForm;

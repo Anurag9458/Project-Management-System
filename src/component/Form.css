@@ -1,31 +1,33 @@
 .form{
-    @apply mx-auto max-w-[50rem] border-[0.1rem] border-gray-300 rounded-md bg-gray-50 text-lg
+    @apply mx-auto w-fit border border-gray-300 rounded-md bg-gray-50 text-lg p-2 
 }
 
 .inputform{
-    @apply border-[0.05rem] w-fit border-black rounded-md p-2 mx-1
+    @apply border w-[15rem]  rounded-md p-2  my-2
+}
+
+.inputform1{
+    @apply border w-[15rem] rounded-md p-2 
 }
 
 .error{
-    @apply border-[0.1rem] w-full  border-red-700 rounded-md p-2
+    @apply border w-full  border-red-700 rounded-md p-2
 }
 
 .texterror{
-    @apply block w-full h-[5rem] border-[0.1rem] border-red-700 mt-1 rounded-lg p-1  
+    @apply block w-full h-[3rem] border border-red-700 my-2 rounded-md p-2 
 }
 
 .textform{
-    @apply block  w-full   h-[5rem] border-[0.05rem] border-black mt-1 rounded-lg p-1 
+    @apply block  w-full   h-[3rem] border my-2 rounded-md p-2 
 }
 
 
 .div-form{
-    @apply my-[1rem] mx-[2rem] 
+    @apply my-2 mx-3
 }
 
-.add-button{
-    @apply w-16 text-center border-[0.1rem] font-serif font-medium ml-3 p-1
-}
+
 
 .add-div{
     @apply ml-10 font-serif text-lg
@@ -36,12 +38,16 @@
 }
 
 
-button{
-    @apply border-[0.1rem] border-black p-1 rounded-lg m-1 bg-blue-950 text-white
+/* button{
+    @apply border p-2 rounded-md m-1 bg-blue-950 text-white
+} */
+
+.button-add{
+    @apply text-lg rounded-md  font-semibold   border ml-1  bg-[#503291] text-white p-1 
 }
 
 .name-form{
-    @apply border-[0.05rem] w-full border-black rounded-md p-2 mx-1
+    @apply border w-[13rem]  rounded-md p-2 
 }
 
 label{
@@ -49,5 +55,5 @@ label{
 }
 
 .grid-form{
-    @apply flex flex-wrap 
+    @apply flex flex-wrap  gap-[1rem]
 }

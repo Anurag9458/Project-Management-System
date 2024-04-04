@@ -12,27 +12,27 @@ const Card = () => {
 
   return (
     <div className="div-card">
-      <p className="p-card">
-        Project Name :<span className="font-medium "> {val.pname}</span>
-      </p>
-      <p className="p-card">
+      <div className="p-card">
+        Project Name :<span className="font-medium "> {val.project_name}</span>
+      </div>
+      <div className="p-card">
         Phase : <span className="font-medium"> {val.phase}</span>
-      </p>
-      <p className="p-card">
-        Project Description :<span className="font-medium"> {val.pdes}</span>
-      </p>
+      </div>
+      <div className="p-card break-words">
+        Project Description :<span className="font-medium"> {val.project_des}</span>
+      </div>
       <div className="grid grid-cols-2">
-        <p className="p-card1">Role</p>
-        <p className="p-card1">Name</p>
+        <p className="p-card1 border-2">Role</p>
+        <p className="p-card1 border-2">Name</p>
       </div>
       {val.roles.map((v, ind) => (
         <div className="grid grid-cols-2">
-          <p className="mx-2">{arr[v.role]}</p>
-          <p className="mx-2">{v.name}</p>
+          <p className="pl-2 border-2">{arr[v.role]}</p>
+          <p className="pl-2 border-2">{v.name}</p>
         </div>
       ))}
 
-      <p className="p-card">
+      <div className="p-card">
         Source Url :{" "}
         <a
           className="font-medium text-blue-400 underline"
@@ -41,9 +41,12 @@ const Card = () => {
         >
           {val.url}
         </a>
-      </p>
+      </div>
+      <div className="p-card">
+        Project Status :<span className="font-medium"> {val.status}</span>
+      </div>
       <div className="text-center">
-        <button className="w-16  font-serif" onClick={() => navigate(-1)}>
+        <button className="button font-serif" onClick={() => navigate(-1)}>
           Back
         </button>
       </div>

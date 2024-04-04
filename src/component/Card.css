@@ -1,11 +1,11 @@
 .div-card{
-    @apply mx-auto mt-28 w-96 h-fit  border-2 rounded-lg p-2 bg-gray-50
+  @apply border-2 bg-gray-50 p-2  mx-auto my-10 rounded-sm w-[40rem]
 }
 
 .p-card{
-    @apply font-serif text-lg font-semibold m-2
+    @apply font-serif text-lg font-semibold m-2 
 }
 
 .p-card1{
-    @apply font-serif text-lg font-semibold my-1 mx-2
+    @apply font-serif text-lg font-semibold pl-2 
 }

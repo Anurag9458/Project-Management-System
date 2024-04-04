@@ -7,85 +7,98 @@ import { toast } from "react-toastify";
 const NoteState = (props) => {
   const nRole = { role: "", name: "", isbuttonActive: true };
   const [details, setDetails] = useState({
-    pname: "",
-    pdes: "",
+    project_name: "",
+    project_des: "",
     roles: [{ ...nRole }],
     url: "",
     phase: "",
+    status: "",
   });
   const tdata = {
-    pname: "",
-    pdes: "",
+    project_name: "",
+    project_des: "",
     roles: [{ ...nRole }],
     url: "",
     phase: "",
+    status: "",
   };
 
   const [eye, setEye] = useState({
-    pname: "",
-    pdes: "",
+    project_name: "",
+    project_des: "",
     roles: [{ ...nRole }],
     url: "",
     phase: "",
+    status: "",
   });
 
   const navigate = useNavigate();
 
-  const sortData = (temp) => {
-    const sortedTable = temp.sort((a, b) => {
-      return a.pname.localeCompare(b.pname);
+  // const sortData = (temp) => {
+  //   const sortedTable = temp.sort((a, b) => {
+  //     return a.project_name.localeCompare(b.project_name);
+  //   });
+  //   return sortedTable;
+  // };
+
+  const host = "http://localhost:5000";
+  const temp1 = [];
+
+  const [notes, setNotes] = useState(temp1);
+
+  //Get all Forms
+  const getForms = async () => {
+    //API CALL
+
+    const response = await fetch(`${host}/api/forms/fetchAll`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
     });
-    return sortedTable;
+    const json = await response.json();
+    // console.log(json);
+    setNotes(json);
+    // console.log(notes);
+    return json;
   };
 
-  const handleEdit = (val) => {
-    const ind = print.findIndex(
-      (element) => JSON.stringify(element) === JSON.stringify(val)
-    );
-    if (ind !== -1) {
-      const filtered = print.filter((e, index) => index !== ind);
-      const sortedData = sortData(filtered);
-      const temp = print[ind];
-      setPrint(sortedData);
-      setDetails(temp);
-      navigate("/form");
-    }
+  //Add a Form
+  const addForm = async (
+    project_name,
+    project_des,
+    roles,
+    url,
+    phase,
+    status
+  ) => {
+    //API CALL
+
+    const response = await fetch(`${host}/api/forms/addform`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        project_name,
+        project_des,
+        roles,
+        url,
+        phase,
+        status,
+      }),
+    });
+    const note = await response.json();
+    setNotes(notes.concat(note));
+    toast.success("Form Added Successfully");
   };
 
-  const [print, setPrint] = useState([]);
-
-  const temp = localStorage.getItem("data");
-  useEffect(
-    () => {
-      if (temp && temp.length > 0) {
-        const data = JSON.parse(temp);
-        setPrint(data);
-      }
-    }, // eslint-disable-next-line
-    [temp]
-  );
-
-  const updateDetails = (e) => {
-    const check = print.some(
-      (element) => JSON.stringify(element) === JSON.stringify(e)
-    );
-
-    if (print.length > 0 && check) {
-      toast.warning("Details are already present");
-      return 0;
-    } else {
-      const updatedPrint = [...print, e];
-      setPrint(updatedPrint);
-      const store = JSON.stringify(sortData(updatedPrint));
-      localStorage.setItem("data", store);
-      setDetails(tdata);
-      return 1;
-    }
-  };
-
-  //Here we are deleting the details
-
-  const handleDelete = (val) => {
+  //Delete a note
+  const handleDelete = async (id) => {
+    //API CALL
+    
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -94,21 +107,76 @@ const NoteState = (props) => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        const updatedPrint = print.filter(
-          (e) => JSON.stringify(e) !== JSON.stringify(val)
-        );
-        setPrint(updatedPrint);
-        localStorage.setItem("data", JSON.stringify(sortData(updatedPrint)));
-
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
+        const response = await fetch(`${host}/api/forms/deleteform/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+          // body:JSON.stringify(data)
         });
+        const json = await response.json();
+        console.log(json);
+
+        const newnotes = notes.filter((note) => note._id !== id);
+        setNotes(newnotes);
+        // const data = await getForms();
+        // console.log(data);
+        
       }
     });
+  };
+
+  //Edit a note
+  const handleEdit = async (
+    id,
+    project_name,
+    project_des,
+    roles,
+    url,
+    phase,
+    status
+  ) => {
+    //API CALL
+
+    const response = await fetch(`${host}/api/forms/updateform/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        project_name,
+        project_des,
+        roles,
+        url,
+        phase,
+        status,
+      }),
+    });
+    const json = await response.json();
+    console.log(json);
+
+    //Logic to edit
+    let newNotes = JSON.parse(JSON.stringify(notes));
+    for (let index = 0; index < newNotes.length; index++) {
+      const element = newNotes[index];
+      if (element._id === id) {
+        newNotes[index].project_name = project_name;
+        newNotes[index].project_des = project_des;
+        newNotes[index].roles = roles;
+        newNotes[index].url = url;
+        newNotes[index].phase = phase;
+        newNotes[index].status = status;
+
+        break;
+      }
+    }
+    setNotes(newNotes);
+    setDetails(tdata);
+    // showAlert("Note Updated Successfully","success")
   };
 
   // Here we are handling eye button
@@ -123,12 +191,13 @@ const NoteState = (props) => {
         details,
         setDetails,
         handleDelete,
-        updateDetails,
         handleEdit,
         handleVisibility,
-        setPrint,
         eye,
-        print,
+        getForms,
+        notes,
+        addForm,
+        setNotes
       }}
     >
       {props.children}

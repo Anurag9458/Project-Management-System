@@ -1,5 +1,5 @@
 .nav{
-    @apply border-2 border-black flex flex-wrap text-2xl font-[merck] font-medium p-2 bg-[#503291] 
+    @apply border-2 items-center border-black flex flex-wrap text-2xl font-serif font-medium px-2 py-1 bg-[#503291] 
     text-white w-[100%] justify-between
 }
 
@@ -11,3 +11,7 @@
     @apply text-right
 }
 
+
+.button-nav{
+    @apply border-[0.2rem] border-black  m-1 rounded-lg bg-white text-black font-serif font-semibold text-lg p-1
+}
